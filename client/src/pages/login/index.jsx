@@ -23,7 +23,7 @@ function Login(props) {
     showSuccess("验证成功");
     setTimeout(() => {
       switchTab("/pages/index/index");
-    }, 1000);
+    }, 1500);
   };
   return (
     <Main>

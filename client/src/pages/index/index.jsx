@@ -6,7 +6,7 @@ import { getConfig, checkFirstLogin } from "@/request";
 import { NCard, NavCard, Carousel, Main } from "@/components";
 
 import "./index.scss";
-import { showSuccess } from "../../utils";
+import { navigate, showSuccess } from "../../utils";
 
 function Index() {
   const menuInfo = {
@@ -60,21 +60,20 @@ function Index() {
     return (
       <NCard className='mb-1 login-card' onClick={onLogin}>
         <Text>即刻入会，尊享好礼</Text>
-        <Text onClick={onLogin}>登录 / 注册</Text>
+        <Text >登录 / 注册</Text>
       </NCard>
     );
   };
 
   const onLogin = async () => {
     let res = await checkFirstLogin();
-    console.log(res.code);
+    console.log(res);
     if (res.code === 20001) {
       return;
     }
     if (res.code === 20000) {
-      Taro.navigateTo({
-        url: "/pages/login/index?mobile=12345678901"
-      });
+      navigate("/pages/login/index?mobile=12345678901")
+      return
     }
   };
   const onNavigate = (val, e) => {
