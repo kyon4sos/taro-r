@@ -1,4 +1,5 @@
 import Taro from "@tarojs/taro";
+import {showError } from '@/utils'
 
 const func = async (name, data) => {
   Taro.showLoading({
@@ -10,25 +11,18 @@ const func = async (name, data) => {
       name: name,
       data: data
     });
-    Taro.hideLoading();
     console.log(res);
+    Taro.hideLoading();
     if (res.result.code < 40000) {
       return res.result;
     }
     if (res.result.code >= 40000) {
-      Taro.showToast({
-        title: res.result.msg,
-        icon: "error",
-        duration: 2000
-      });
+      showError(res.result.msg)
       return res.result;
     }
   } catch (err) {
-    Taro.showToast({
-      title: err,
-      icon: "error",
-      duration: 2000
-    });
+    console.log(err);
+    showError(err)
   }
 };
 
