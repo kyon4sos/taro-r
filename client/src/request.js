@@ -1,5 +1,36 @@
 import Taro from "@tarojs/taro";
-import {func } from '@/utils'
+
+const func = async (name, data) => {
+  Taro.showLoading({
+    title: "加载中"
+  });
+
+  try {
+    let res = await Taro.cloud.callFunction({
+      name: name,
+      data: data
+    });
+    Taro.hideLoading();
+    console.log(res);
+    if (res.result.code < 40000) {
+      return res.result;
+    }
+    if (res.result.code >= 40000) {
+      Taro.showToast({
+        title: res.result.msg,
+        icon: "error",
+        duration: 2000
+      });
+      return res.result;
+    }
+  } catch (err) {
+    Taro.showToast({
+      title: err,
+      icon: "error",
+      duration: 2000
+    });
+  }
+};
 
 const getConfig = async () => {
   const url =
@@ -10,8 +41,12 @@ const getConfig = async () => {
   return res;
 };
 
-const getUserInfo = async () =>{
-  func('')
-}
+const getUserInfo = async () => {
+  func("");
+};
 
-export { getConfig,getUserInfo };
+const checkFirstLogin = async () => {
+  return func("checkFirstLogin");
+};
+
+export { getConfig, getUserInfo, checkFirstLogin };

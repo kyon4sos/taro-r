@@ -1,25 +1,21 @@
-import { Component } from "react";
-import { View, Image, Swiper, SwiperItem } from "@tarojs/components";
-
+import { Image, Swiper, SwiperItem } from "@tarojs/components";
+import classNames from "classnames";
 import "./index.scss";
 
-export default class NavBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+function Carousel(props) {
+  const { className = "", imgs = [] } = props;
 
-  render() {
-    const { imgs } = this.props;
-    return (
-      <Swiper className={`${this.props.className|| ''} 'carousel'`}
-        indicatorColor='#999'
-        indicatorActiveColor='#333'
-        circular
-        indicatorDots
-        autoplay
-      >
-        {imgs.map((item, idx) => {
+  return (
+    <Swiper
+      className={classNames(className, "carousel")}
+      indicatorColor='#999'
+      indicatorActiveColor='#333'
+      circular
+      indicatorDots
+      autoplay
+    >
+      {imgs.length > 0 &&
+        imgs.map((item, idx) => {
           return (
             <SwiperItem key={idx}>
               {/* <View className='title'>{item.title}</View> */}
@@ -27,7 +23,7 @@ export default class NavBar extends Component {
             </SwiperItem>
           );
         })}
-      </Swiper>
-    );
-  }
+    </Swiper>
+  );
 }
+export default Carousel;

@@ -1,7 +1,7 @@
 export default {
-  pages: ["pages/index/index","pages/center/index"],
+  pages: ["pages/index/index","pages/center/index","pages/login/index"],
   tabBar: {
-    selectedColor: "#ffc508",
+    selectedColor: "#006241",
     color: "#000",
     list: [
       {

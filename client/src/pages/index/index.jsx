@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { View, Text, Image } from "@tarojs/components";
+import Taro from '@tarojs/taro'
+// 按需引入
+import { getConfig,checkFirstLogin } from "@/request";
+import { NCard, NavCard, Carousel, Main } from "@/components";
 
-import "taro-ui/dist/style/components/button.scss"; // 按需引入
-import { getConfig } from "@/request";
-import { NCard, NavCard, Carousel } from "@/components";
 import "./index.scss";
 
 function Index() {
@@ -12,6 +13,7 @@ function Index() {
     description: "",
     image: ""
   };
+
   const [banners, setBanners] = useState([]);
   const [ads, setAds] = useState([]);
   const [navs, setNavs] = useState([]);
@@ -22,6 +24,7 @@ function Index() {
     wsg: menuInfo,
     order: menuInfo
   });
+
   const createNavs = newMenu => {
     return Object.values(newMenu)
       .filter(item => !item.label)
@@ -32,6 +35,7 @@ function Index() {
         return item;
       });
   };
+
   useEffect(() => {
     getConfig().then(res => {
       const { banner, newMenu, ad } = res.data.data;
@@ -41,52 +45,89 @@ function Index() {
       setNavs(createNavs(newMenu));
     });
   }, []);
+  const check = ()=>{
+    
+  }
+  const Ads = props => {
+    let imgs = props.imgs || [];
+    return (
+      <View className='ads-wrapper'>
+        <Carousel className='ads' imgs={imgs} />
+      </View>
+    );
+  };
+
+  const Login = () => {
+    return (
+      <NCard className='mb-1 login-card' onClick={onLogin}>
+        <Text>即刻入会，尊享好礼</Text>
+        <Text onClick={onLogin}>登录 / 注册</Text>
+      </NCard>
+    );
+  };
+
+  const onLogin =async () =>{
+    let res =await checkFirstLogin();
+    console.log(res.code);
+    if(res.code ===20001) {
+      
+      return
+    }
+    if(res.code ===20000) {
+      Taro.navigateTo({
+        url: '/pages/login/index?mobile=12345678901',
+        // events: {
+        //   // 为指定事件添加一个监听器，获取被打开页面传送到当前页面的数据
+        //   acceptDataFromOpenedPage: function(data) {
+        //     console.log(data)
+        //   },
+        //   someEvent: function(data) {
+        //     console.log(data)
+        //   }
+        // },
+        // success: function (ret) {
+        //   console.log(ret);
+        //   // 通过eventChannel向被打开页面传送数据
+        //   ret.eventChannel.emit('acceptDataFromOpenerPage', { moble: '12345678901' })
+        // }
+      })
+    }
+  }
+  const PurchaseCard = props => {
+    const {
+      newMenu = { mop: { label: "", image: "" }, mod: { label: "", image: "" } }
+    } = props;
+    return (
+      <NCard className='mb-1 purchase-card'>
+        <View className='left'>
+          <Text className='slogan'>{newMenu.mop.label}</Text>
+          <Image
+            className='img'
+            mode='widthFix'
+            src={newMenu.mop.image}
+          ></Image>
+        </View>
+        <View className='right'>
+          <View className='slogan'>{newMenu.mod.label}</View>
+          <Image
+            className='img'
+            mode='widthFix'
+            src={newMenu.mod.image}
+          ></Image>
+        </View>
+      </NCard>
+    );
+  };
+
   return (
     <View>
       <Carousel imgs={banners} />
-      <View className='main'>
-        <NCard className='login-card mb-1'>
-          <Text>即刻入会，尊享好礼</Text>
-          <Text>登录 / 注册</Text>
-        </NCard>
-        <NCard className='purchase-card mb-1'>
-          <View className='left'>
-            <Text className='slogan'>{newMenus.mop.label}</Text>
-            <Image
-              className='img'
-              mode='widthFix'
-              src={newMenus.mop.image}
-            ></Image>
-          </View>
-          <View className='right'>
-            <View className='slogan'>{newMenus.mod.label}</View>
-            <Image
-              className='img'
-              mode='widthFix'
-              src={newMenus.mod.image}
-            ></Image>
-          </View>
-        </NCard>
-        <NavCard navs={navs}></NavCard>
-        {/* <NCard className='nav-card'>
-        {Object.values(newMenus)
-          .filter(item => !item.label)
-          .map((item, idx) => {
-            if(!item.image) {
-              item.image = newMenus.order.image
-            }
-            return (
-              <View className='nav-item' key={idx}>
-                <Image className='nav-icon' src={item.image}></Image>
-                <Text className='desc'> {item.description}</Text>
-              </View>
-            );
-          })}
-      </NCard> */}
-        <View className='ads-wrapper'>
-          <Carousel className='ads' imgs={ads} />
-        </View>
-      </View>
+      <Main>
+        <Login />
+        <PurchaseCard newMenu={newMenus} />
+        <NavCard navs={navs} />
+        <Ads imgs={ads} />
+      </Main>
     </View>
   );
 }
