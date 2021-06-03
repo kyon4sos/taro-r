@@ -1,0 +1,20 @@
+@import "~taro-ui/dist/style/components/avatar.scss";
+@import "~taro-ui/dist/style/components/button.scss";
+@import "~taro-ui/dist/style/components/loading.scss";
+@import "~taro-ui/dist/style/components/progress.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+view {
+  box-sizing: border-box;
+}
+
+.page {
+  padding: 0 32px;
+}
+.main {
+  padding: 0 32px;
+}
+.mb-1{
+  margin-bottom: 24px;
+}
+ 

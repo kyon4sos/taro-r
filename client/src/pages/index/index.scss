@@ -1,0 +1,76 @@
+
+.login-card {
+  width: 100%;
+  height: 100%;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-image: url(https://6e6f-note-9gpvzagz1944b75f-1258879474.tcb.qcloud.la/header_cn_2020_06_02.jpg?sign=ada8943ba26c3b9ed782f46de300c959&t=1622693757);
+  background-repeat: no-repeat;
+  background-size: 200%;
+  background-clip: border-box;
+  color: #fff;
+}
+.login-card text:nth-child(2) {
+  color: #fff;
+  font-size: 24px;
+  padding: 16px 24px;
+  border-radius: 32px;
+  background-color: #3d3935;
+}
+.purchase-card {
+  display: flex;
+  width: 100%;
+  height: 280px;
+}
+.purchase-card .left,
+.purchase-card .right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  position: relative;
+}
+.purchase-card .left {
+  border-right: #aaa 2px solid;
+}
+.purchase-card .img {
+  width: 70%;
+}
+
+.purchase-card .slogan {
+  font-size: 20px;
+  color: #00a862;
+  margin-bottom: 16px;
+  position: absolute;
+  z-index: 2;
+  top: 46px;
+}
+.nav-card {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 0px;
+}
+.nav-card .nav-item {
+  display: flex;
+  flex-direction: column;
+}
+.nav-card .nav-item .desc {
+  font-size: 20px;
+  color: #999;
+}
+.nav-card .nav-item .nav-icon {
+  width: 120px;
+  height: 120px;
+}
+.ads-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+}
+.ads {
+  height: 300px;
+  border-radius: $card-border-radius;
+}
