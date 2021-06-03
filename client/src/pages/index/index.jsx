@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { View, Text, Image } from "@tarojs/components";
-import Taro from '@tarojs/taro'
-// 按需引入
-import { getConfig,checkFirstLogin } from "@/request";
+import Taro, { showToast } from "@tarojs/taro";
+import { showError } from "@/utils";
+import { getConfig, checkFirstLogin } from "@/request";
 import { NCard, NavCard, Carousel, Main } from "@/components";
 
 import "./index.scss";
+import { showSuccess } from "../../utils";
 
 function Index() {
   const menuInfo = {
@@ -45,9 +46,7 @@ function Index() {
       setNavs(createNavs(newMenu));
     });
   }, []);
-  const check = ()=>{
-    
-  }
+  const check = () => {};
   const Ads = props => {
     let imgs = props.imgs || [];
     return (
@@ -66,48 +65,58 @@ function Index() {
     );
   };
 
-  const onLogin =async () =>{
-    let res =await checkFirstLogin();
+  const onLogin = async () => {
+    let res = await checkFirstLogin();
     console.log(res.code);
-    if(res.code ===20001) {
-      
-      return
+    if (res.code === 20001) {
+      return;
     }
-    if(res.code ===20000) {
+    if (res.code === 20000) {
       Taro.navigateTo({
-        url: '/pages/login/index?mobile=12345678901',
-        // events: {
-        //   // 为指定事件添加一个监听器，获取被打开页面传送到当前页面的数据
-        //   acceptDataFromOpenedPage: function(data) {
-        //     console.log(data)
-        //   },
-        //   someEvent: function(data) {
-        //     console.log(data)
-        //   }
-        // },
-        // success: function (ret) {
-        //   console.log(ret);
-        //   // 通过eventChannel向被打开页面传送数据
-        //   ret.eventChannel.emit('acceptDataFromOpenerPage', { moble: '12345678901' })
-        // }
-      })
+        url: "/pages/login/index?mobile=12345678901"
+      });
     }
-  }
+  };
+  const onNavigate = (val, e) => {
+    console.log(val, e);
+    switch (val) {
+      case 0:
+        showSuccess("暂时没福利");
+        break;
+      case 1:
+        showSuccess("心意不够");
+        break;
+      case 2:
+        showSuccess("还是没福利");
+        break;
+    }
+  };
   const PurchaseCard = props => {
+    const handleClick = e => {
+      let { index = 0 } = e.currentTarget.dataset;
+      if (index == 1) {
+        showError("开发中");
+        return;
+      }
+      if (index == 2) {
+        showError("开发中");
+        return;
+      }
+    };
     const {
       newMenu = { mop: { label: "", image: "" }, mod: { label: "", image: "" } }
     } = props;
     return (
       <NCard className='mb-1 purchase-card'>
-        <View className='left'>
-          <Text className='slogan'>{newMenu.mop.label}</Text>
+        <View className='left' data-index='1' onClick={handleClick}>
+          <View className='slogan'>{newMenu.mop.label}</View>
           <Image
             className='img'
             mode='widthFix'
             src={newMenu.mop.image}
           ></Image>
         </View>
-        <View className='right'>
+        <View className='right' data-index='2' onClick={handleClick}>
           <View className='slogan'>{newMenu.mod.label}</View>
           <Image
             className='img'
@@ -125,7 +134,7 @@ function Index() {
       <Main>
         <Login />
         <PurchaseCard newMenu={newMenus} />
-        <NavCard navs={navs} />
+        <NavCard navs={navs} onClick={onNavigate} />
         <Ads imgs={ads} />
       </Main>
     </View>

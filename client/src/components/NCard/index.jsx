@@ -3,10 +3,10 @@ import classNames from 'classnames'
 import "./index.scss";
 
 function NCard(props) {
-  const { className = "",children } = props;
+  const { className = "",children,onClick } = props;
 
   return (
-    <View className={classNames(className, 'n-card')}>
+    <View className={classNames(className, 'n-card')} onClick={onClick}>
       {children}
     </View>
   );
