@@ -49,4 +49,7 @@ const checkFirstLogin = async () => {
   return func("checkFirstLogin");
 };
 
-export { getConfig, getUserInfo, checkFirstLogin };
+const checkSmsCode =()=>{
+  return func("checkSmsCode");
+}
+export { getConfig, getUserInfo, checkFirstLogin,checkSmsCode };

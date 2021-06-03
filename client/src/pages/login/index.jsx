@@ -1,27 +1,37 @@
-import { View, Text } from "@tarojs/components";
+import { Text } from "@tarojs/components";
 import { useEffect, useState } from "react";
 import { getCurrentInstance } from "@tarojs/taro";
 import { AtInput, AtButton } from "taro-ui";
 import { Main } from "@/components";
-import {desePhone} from '@/utils'
+import { desePhone, switchTab, showSuccess } from "@/utils";
+// import { checkSmsCode } from '@/request'
 import "./index.scss";
 
 function Login(props) {
   const [phone, setPhone] = useState("");
-  const [code,setCode] = useState("")
+  const [code, setCode] = useState("");
   useEffect(() => {
     const { mobile } = getCurrentInstance().router.params;
     setPhone(mobile);
-  },[]);
-  
-  const handleChange = (val)=>{
-    setCode(val)
-    console.log(code);
-  }
+  }, []);
+
+  const handleChange = val => {
+    setCode(val);
+  };
+  const handleConfirm = async () => {
+    // let ret  = await  checkSmsCode()
+    showSuccess("验证成功");
+    setTimeout(() => {
+      switchTab("/pages/index/index");
+    }, 1000);
+  };
   return (
     <Main>
-      <Text className='tip'>为了保护账号的安全，需要先验证您当前的手机号{desePhone(phone)}</Text>
-      <AtInput className='mb-1 '
+      <Text className='tip'>
+        为了保护账号的安全，需要先验证您当前的手机号{desePhone(phone)}
+      </Text>
+      <AtInput
+        className='mb-1 '
         clear
         autoFocus
         focus
@@ -30,9 +40,13 @@ function Login(props) {
         maxLength='6'
         value={code}
         onChange={handleChange}
-        placeholder='请输入短信验证码'
+        placeholder='请输入6位短信验证码'
       ></AtInput>
-      <AtButton disabled={code.length ==6? false : true} type='primary'>
+      <AtButton
+        disabled={code.length == 6 ? false : true}
+        onClick={handleConfirm}
+        type='primary'
+      >
         确认
       </AtButton>
     </Main>
