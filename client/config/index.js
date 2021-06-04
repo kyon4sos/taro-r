@@ -67,7 +67,8 @@ const config = {
     '@/utils': resolve(__dirname, '..', 'src/utils'),
     '@/package': resolve(__dirname, '..', 'package.json'),
     '@/project': resolve(__dirname, '..', 'project.config.json'),
-    '@/request':resolve(__dirname,'..','src/request.js')
+    '@/request':resolve(__dirname,'..','src/request.js'),
+    '@/store':resolve(__dirname,'..','src/store')
   },
   sass: {
     resource: resolve(__dirname, '..', 'src/styles/variable.scss')

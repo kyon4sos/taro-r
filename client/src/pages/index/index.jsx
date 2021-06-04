@@ -3,18 +3,29 @@ import { View, Text, Image } from "@tarojs/components";
 import Taro, { showToast } from "@tarojs/taro";
 import { showError } from "@/utils";
 import { getConfig, checkFirstLogin } from "@/request";
-import { NCard, NavCard, Carousel, Main } from "@/components";
 
+import { NCard, NavCard, Carousel, Main } from "@/components";
+import { useSelector, useDispatch } from "react-redux";
 import "./index.scss";
 import { navigate, showSuccess } from "../../utils";
 
-function Index() {
-  const menuInfo = {
-    label: "",
-    description: "",
-    image: ""
-  };
+const menuInfo = {
+  label: "",
+  description: "",
+  image: "",
+};
+const createNavs = (newMenu) => {
+  return Object.values(newMenu)
+    .filter((item) => !item.label)
+    .map((item) => {
+      if (!item.image) {
+        item.image = newMenu.order.image;
+      }
+      return item;
+    });
+};
 
+function Index(props) {
   const [banners, setBanners] = useState([]);
   const [ads, setAds] = useState([]);
   const [navs, setNavs] = useState([]);
@@ -23,22 +34,13 @@ function Index() {
     mod: menuInfo,
     moment: menuInfo,
     wsg: menuInfo,
-    order: menuInfo
+    order: menuInfo,
   });
 
-  const createNavs = newMenu => {
-    return Object.values(newMenu)
-      .filter(item => !item.label)
-      .map(item => {
-        if (!item.image) {
-          item.image = newMenu.order.image;
-        }
-        return item;
-      });
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getConfig().then(res => {
+    getConfig().then((res) => {
       const { banner, newMenu, ad } = res.data.data;
       setBanners(banner);
       setNewMenus({ ...newMenu });
@@ -46,35 +48,35 @@ function Index() {
       setNavs(createNavs(newMenu));
     });
   }, []);
-  const check = () => {};
-  const Ads = props => {
+
+  const Ads = (props) => {
     let imgs = props.imgs || [];
     return (
-      <View className='ads-wrapper'>
-        <Carousel className='ads' imgs={imgs} />
+      <View className="ads-wrapper">
+        <Carousel className="ads" imgs={imgs} />
       </View>
     );
   };
 
   const Login = () => {
     return (
-      <NCard className='mb-1 login-card' onClick={onLogin}>
+      <NCard className="mb-1 login-card" onClick={onLogin}>
         <Text>即刻入会，尊享好礼</Text>
-        <Text >登录 / 注册</Text>
+        <Text>登录 / 注册</Text>
       </NCard>
     );
   };
 
-  const onLogin = async () => {
-    let res = await checkFirstLogin();
-    console.log(res);
-    if (res.code === 20001) {
-      return;
-    }
-    if (res.code === 20000) {
-      navigate("/pages/login/index?mobile=12345678901")
-      return
-    }
+  const onLogin = () => {
+
+    navigate("/pages/login/index");
+    // if (res.code === 20001) {
+    //   return;
+    // }
+    // if (res.code === 20000) {
+    //   navigate("/pages/login/index?mobile=12345678901");
+    //   return;
+    // }
   };
   const onNavigate = (val, e) => {
     console.log(val, e);
@@ -90,8 +92,8 @@ function Index() {
         break;
     }
   };
-  const PurchaseCard = props => {
-    const handleClick = e => {
+  const PurchaseCard = (props) => {
+    const handleClick = (e) => {
       let { index = 0 } = e.currentTarget.dataset;
       if (index == 1) {
         showError("开发中");
@@ -103,23 +105,26 @@ function Index() {
       }
     };
     const {
-      newMenu = { mop: { label: "", image: "" }, mod: { label: "", image: "" } }
+      newMenu = {
+        mop: { label: "", image: "" },
+        mod: { label: "", image: "" },
+      },
     } = props;
     return (
-      <NCard className='mb-1 purchase-card'>
-        <View className='left' data-index='1' onClick={handleClick}>
-          <View className='slogan'>{newMenu.mop.label}</View>
+      <NCard className="mb-1 purchase-card">
+        <View className="left" data-index="1" onClick={handleClick}>
+          <View className="slogan">{newMenu.mop.label}</View>
           <Image
-            className='img'
-            mode='widthFix'
+            className="img"
+            mode="widthFix"
             src={newMenu.mop.image}
           ></Image>
         </View>
-        <View className='right' data-index='2' onClick={handleClick}>
-          <View className='slogan'>{newMenu.mod.label}</View>
+        <View className="right" data-index="2" onClick={handleClick}>
+          <View className="slogan">{newMenu.mod.label}</View>
           <Image
-            className='img'
-            mode='widthFix'
+            className="img"
+            mode="widthFix"
             src={newMenu.mod.image}
           ></Image>
         </View>

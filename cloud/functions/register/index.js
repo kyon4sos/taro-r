@@ -5,8 +5,6 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 const users = cloud.database().collection("users")
-const users =  cloud.database().collection("users")
-console.log(users);
 const jwt = require('jsonwebtoken');
 const security = "abc123"
 const createToken = (data) => {
@@ -33,6 +31,7 @@ exports.main = async (event, context) => {
   const dbRes = await users.where({
     _openid: OPENID
   }).get()
+  console.log(dbRes);
   if (dbRes.data.length == 0) {
     const addRes = await users.add({
       data: {
@@ -42,16 +41,17 @@ exports.main = async (event, context) => {
       }
     })
     if (addRes._id) {
-      const res = await users.doc(addRes._id)
+      const res = await users.doc(addRes._id).get()
+      console.log(res);
       token = createToken()
-      userInfo = res.data[0]
       data = {
         code: 20000,
         msg: 'success',
-        data: res.data[0]
+        data: res.data
       }
     }
   } else {
+    
     data = {
       code: 20000,
       msg: '已注册',

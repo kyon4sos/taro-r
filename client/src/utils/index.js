@@ -26,11 +26,11 @@ const switchTab = url => {
     url: url
   });
 };
-const navigate=(url)=>{
+const navigate = url => {
   Taro.navigateTo({
     url
   });
-}
+};
 const showToast = (msg, icon, duration = 2000) => {
   Taro.showToast({
     title: msg,
@@ -44,4 +44,19 @@ const showError = (msg, icon = "error", duration = 2000) => {
 const showSuccess = (msg = "成功", icon = "success", duration = 2000) => {
   showToast(msg, icon, duration);
 };
-export { func, desePhone, navigate,switchTab, showToast, showError, showSuccess };
+
+const wxGetUserProfile = (desc ="用于完善会员资料") => {
+ return Taro.getUserProfile({
+    desc:desc,
+  });
+};
+export {
+  func,
+  desePhone,
+  navigate,
+  switchTab,
+  showToast,
+  showError,
+  showSuccess,
+  wxGetUserProfile
+};

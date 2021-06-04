@@ -22,7 +22,8 @@ const func = async (name, data) => {
     }
   } catch (err) {
     console.log(err);
-    showError(err)
+    Taro.hideLoading();
+    showError('粗错了')
   }
 };
 
@@ -42,8 +43,10 @@ const getUserInfo = async () => {
 const checkFirstLogin = async () => {
   return func("checkFirstLogin");
 };
-
+const register = async (userInfo) => {
+  return func("register",userInfo);
+};
 const checkSmsCode =()=>{
   return func("checkSmsCode");
 }
-export { getConfig, getUserInfo, checkFirstLogin,checkSmsCode };
+export { getConfig, getUserInfo, checkFirstLogin,checkSmsCode,register };
