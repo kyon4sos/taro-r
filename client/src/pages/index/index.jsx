@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image } from "@tarojs/components";
-import Taro, { showToast } from "@tarojs/taro";
 import { showError } from "@/utils";
-import { getConfig, checkFirstLogin } from "@/request";
+import { getConfig } from "@/request";
 
 import { NCard, NavCard, Carousel, Main } from "@/components";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,6 +13,67 @@ const menuInfo = {
   description: "",
   image: "",
 };
+const Ads = React.memo((props) => {
+  console.log(" Ads ");
+  let imgs = props.imgs || [];
+  return (
+    <View className="ads-wrapper">
+      <Carousel className="ads" imgs={imgs} />
+    </View>
+  );
+});
+
+const Login = React.memo(() => {
+  const onLogin = () => {
+    navigate("/pages/login/index");
+    // if (res.code === 20001) {
+    //   return;
+    // }
+    // if (res.code === 20000) {
+    //   navigate("/pages/login/index?mobile=12345678901");
+    //   return;
+    // }
+  };
+  console.log("Login ");
+  return (
+    <NCard className="mb-1 login-card" onClick={onLogin}>
+      <Text>即刻入会，尊享好礼</Text>
+      <Text>登录 / 注册</Text>
+    </NCard>
+  );
+});
+const PurchaseCard = React.memo((props) => {
+  console.log("PurchaseCard ");
+  const handleClick = (e) => {
+    let { index = 0 } = e.currentTarget.dataset;
+    if (index == 1) {
+      showError("开发中");
+      return;
+    }
+    if (index == 2) {
+      showError("开发中");
+      return;
+    }
+  };
+  const {
+    newMenu = {
+      mop: { label: "", image: "" },
+      mod: { label: "", image: "" },
+    },
+  } = props;
+  return (
+    <NCard className="mb-1 purchase-card">
+      <View className="left" data-index="1" onClick={handleClick}>
+        <View className="slogan">{newMenu.mop.label}</View>
+        <Image className="img" mode="widthFix" src={newMenu.mop.image}></Image>
+      </View>
+      <View className="right" data-index="2" onClick={handleClick}>
+        <View className="slogan">{newMenu.mod.label}</View>
+        <Image className="img" mode="widthFix" src={newMenu.mod.image}></Image>
+      </View>
+    </NCard>
+  );
+});
 const createNavs = (newMenu) => {
   return Object.values(newMenu)
     .filter((item) => !item.label)
@@ -26,6 +86,7 @@ const createNavs = (newMenu) => {
 };
 
 function Index(props) {
+  let [counter, setCounter] = useState(0);
   const [banners, setBanners] = useState([]);
   const [ads, setAds] = useState([]);
   const [navs, setNavs] = useState([]);
@@ -36,9 +97,6 @@ function Index(props) {
     wsg: menuInfo,
     order: menuInfo,
   });
-
-  const dispatch = useDispatch();
-
   useEffect(() => {
     getConfig().then((res) => {
       const { banner, newMenu, ad } = res.data.data;
@@ -49,35 +107,6 @@ function Index(props) {
     });
   }, []);
 
-  const Ads = (props) => {
-    let imgs = props.imgs || [];
-    return (
-      <View className="ads-wrapper">
-        <Carousel className="ads" imgs={imgs} />
-      </View>
-    );
-  };
-
-  const Login = () => {
-    return (
-      <NCard className="mb-1 login-card" onClick={onLogin}>
-        <Text>即刻入会，尊享好礼</Text>
-        <Text>登录 / 注册</Text>
-      </NCard>
-    );
-  };
-
-  const onLogin = () => {
-
-    navigate("/pages/login/index");
-    // if (res.code === 20001) {
-    //   return;
-    // }
-    // if (res.code === 20000) {
-    //   navigate("/pages/login/index?mobile=12345678901");
-    //   return;
-    // }
-  };
   const onNavigate = (val, e) => {
     console.log(val, e);
     switch (val) {
@@ -92,45 +121,6 @@ function Index(props) {
         break;
     }
   };
-  const PurchaseCard = (props) => {
-    const handleClick = (e) => {
-      let { index = 0 } = e.currentTarget.dataset;
-      if (index == 1) {
-        showError("开发中");
-        return;
-      }
-      if (index == 2) {
-        showError("开发中");
-        return;
-      }
-    };
-    const {
-      newMenu = {
-        mop: { label: "", image: "" },
-        mod: { label: "", image: "" },
-      },
-    } = props;
-    return (
-      <NCard className="mb-1 purchase-card">
-        <View className="left" data-index="1" onClick={handleClick}>
-          <View className="slogan">{newMenu.mop.label}</View>
-          <Image
-            className="img"
-            mode="widthFix"
-            src={newMenu.mop.image}
-          ></Image>
-        </View>
-        <View className="right" data-index="2" onClick={handleClick}>
-          <View className="slogan">{newMenu.mod.label}</View>
-          <Image
-            className="img"
-            mode="widthFix"
-            src={newMenu.mod.image}
-          ></Image>
-        </View>
-      </NCard>
-    );
-  };
 
   return (
     <View>
@@ -144,5 +134,4 @@ function Index(props) {
     </View>
   );
 }
-
 export default Index;
