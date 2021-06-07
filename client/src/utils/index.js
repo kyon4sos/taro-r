@@ -1,5 +1,5 @@
 import Taro from "@tarojs/taro";
-
+import { useRouter } from "@tarojs/taro";
 const func = (name, data) => {
   return Taro.cloud.callFunction({
     // 要调用的云函数名称
@@ -45,9 +45,9 @@ const showSuccess = (msg = "成功", icon = "success", duration = 2000) => {
   showToast(msg, icon, duration);
 };
 
-const wxGetUserProfile = (desc ="用于完善会员资料") => {
- return Taro.getUserProfile({
-    desc:desc,
+const wxGetUserProfile = (desc = "用于完善会员资料") => {
+  return Taro.getUserProfile({
+    desc: desc
   });
 };
 export {

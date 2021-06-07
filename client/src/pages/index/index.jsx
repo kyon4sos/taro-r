@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 import { View, Text, Image } from "@tarojs/components";
+import { AtAvatar, AtProgress } from "taro-ui";
 import { showError } from "@/utils";
 import { getConfig } from "@/request";
 
@@ -14,7 +15,6 @@ const menuInfo = {
   image: "",
 };
 const Ads = React.memo((props) => {
-  console.log(" Ads ");
   let imgs = props.imgs || [];
   return (
     <View className="ads-wrapper">
@@ -34,7 +34,6 @@ const Login = React.memo(() => {
     //   return;
     // }
   };
-  console.log("Login ");
   return (
     <NCard className="mb-1 login-card" onClick={onLogin}>
       <Text>即刻入会，尊享好礼</Text>
@@ -42,8 +41,28 @@ const Login = React.memo(() => {
     </NCard>
   );
 });
+
+const UserInfo = ({ userInfo }) => {
+
+  const onSwitch = () => {
+    navigate("/pages/login/index");
+    // if (res.code === 20001) {
+    //   return;
+    // }
+    // if (res.code === 20000) {
+    //   navigate("/pages/login/index?mobile=12345678901");
+    //   return;
+    // }
+  };
+  console.log(userInfo);
+  return (
+    <NCard className="mb-1 user-card login-card" onClick={onSwitch}>
+      <AtAvatar circle image={userInfo.avatarUrl}></AtAvatar>
+      <Text className="username">{userInfo.nickName}</Text>
+    </NCard>
+  );
+}
 const PurchaseCard = React.memo((props) => {
-  console.log("PurchaseCard ");
   const handleClick = (e) => {
     let { index = 0 } = e.currentTarget.dataset;
     if (index == 1) {
@@ -86,7 +105,8 @@ const createNavs = (newMenu) => {
 };
 
 function Index(props) {
-  let [counter, setCounter] = useState(0);
+  const isLogin = useSelector(state=>state.user.isLogin)
+  const userInfo = useSelector(state=>state.user.userInfo)
   const [banners, setBanners] = useState([]);
   const [ads, setAds] = useState([]);
   const [navs, setNavs] = useState([]);
@@ -108,7 +128,6 @@ function Index(props) {
   }, []);
 
   const onNavigate = (val, e) => {
-    console.log(val, e);
     switch (val) {
       case 0:
         showSuccess("暂时没福利");
@@ -126,7 +145,7 @@ function Index(props) {
     <View>
       <Carousel imgs={banners} />
       <Main>
-        <Login />
+        {isLogin ? <UserInfo userInfo={userInfo}/> : <Login />}
         <PurchaseCard newMenu={newMenus} />
         <NavCard navs={navs} onClick={onNavigate} />
         <Ads imgs={ads} />

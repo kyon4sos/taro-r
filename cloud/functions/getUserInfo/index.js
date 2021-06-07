@@ -10,7 +10,6 @@ exports.main = async (event, context) => {
   let {
     OPENID
   } = wxContext
-  console.log(wxContext.OPENID, );
   const dbResult = await cloud.database().collection('users').where({
     _openid: OPENID
   }).get()

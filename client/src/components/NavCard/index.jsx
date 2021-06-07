@@ -8,7 +8,6 @@ function NavCard({title, onClick,navs = [], className = ""  }){
     // const { className="" ,title, navs=[] ,onClick} = props
 
   return useMemo(() => {
-    console.log("navcard1");
     return (
       <NCard className={classNames(className, "mb-1 nav-card")}>
         {title && <View>{title}</View>}

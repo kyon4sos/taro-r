@@ -20,6 +20,15 @@
   border-radius: 32px;
   background-color: #3d3935;
 }
+.user-card {
+  display: flex;
+  justify-content: flex-start;
+}
+.login-card.user-card .username {
+  margin-left: 20px;
+  font-size: 48px;
+  background-color: transparent;
+}
 .purchase-card {
   display: flex;
   width: 100%;

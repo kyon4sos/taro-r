@@ -1,13 +1,14 @@
 import { View, Text, Image } from "@tarojs/components";
 import { useSelector } from "react-redux";
+import { Fragment } from "react";
 import { AtAvatar, AtProgress } from "taro-ui";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { NCard, NavCard, Main } from "@/components";
+import { navigate } from "@/utils";
 import "./index.scss";
 
 function Center() {
-  const counter = useSelector((state) => state.counter);
-  const [userInfo, setUserInfo] = useState({});
+  const user = useSelector((state) => state.user);
   const navs = [
     {
       image:
@@ -20,18 +21,22 @@ function Center() {
         "https://6e6f-note-9gpvzagz1944b75f-1258879474.tcb.qcloud.la/starbuck/icon_presents.png?sign=9043bfbb1f7d4af3e76c2b0dbd5a1159&t=1622702812",
     },
   ];
-  useEffect(() => {});
+  useEffect(() => {
+    if (!user.isLogin) {
+    }
+    navigate("/pages/login/index");
+  }, []);
 
   const handleClick = () => {};
 
-  const UserInfo = (user) => {
+  const UserInfo = (props) => {
     return (
       <View className="user-info--wrap">
-        <AtAvatar circle image="https://jdc.jd.com/img/200"></AtAvatar>
+        <AtAvatar circle image={user.userInfo.avatarUrl}></AtAvatar>
         <View className="user-info" onClick={handleClick}>
-          <Text>{user.nickName || "游客"}</Text>
+          <Text>{user.userInfo.nickName || "游客"}</Text>
           <Text>
-            {user.nickName || "青铜"} {user.phone || "手机号"}
+            {user.userInfo.nickName || "青铜"} {user.userInfo.phone || ""}
           </Text>
         </View>
       </View>
@@ -87,12 +92,18 @@ function Center() {
 
   return (
     <View>
-      <UserInfo user={userInfo} />
-      <Main>
-        <Member />
-        <Coupon />
-        <NavCard title="我的星巴克" navs={navs} />
-      </Main>
+      {user.isLogin ? (
+        <Fragment>
+          <UserInfo user={user} />
+          <Main>
+            <Member />
+            <Coupon />
+            <NavCard title="我的星巴克" navs={navs} />
+          </Main>
+        </Fragment>
+      ) : (
+        <View></View>
+      )}
     </View>
   );
 }

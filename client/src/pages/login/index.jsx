@@ -1,8 +1,9 @@
-import { Text, View,Image } from "@tarojs/components";
+import { Text, View, Image } from "@tarojs/components";
+import { useRouter } from "@tarojs/taro";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AtInput, AtButton } from "taro-ui";
-import { requestUserInfo,registerUserInfo } from "@/store/actions";
+import { requestUserInfo, registerUserInfo } from "@/store/actions";
 import { Main } from "@/components";
 import {
   desePhone,
@@ -14,13 +15,17 @@ import {
 import "./index.scss";
 
 function Login(props) {
-  const userInfo = useSelector(state => state.userInfo);
-  const isLogin = useSelector(state => state.userInfo.isLogin);
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
-
+  const router = useRouter();
   useEffect(() => {
+    let { params } = router;
+    console.log(router);
+    let navType = params.navType || "";
+    if (navType === "tabbar") {
+    }
     dispatch(requestUserInfo());
   }, []);
 
@@ -35,11 +40,11 @@ function Login(props) {
     //   switchTab("/pages/index/index");
     // }, 1500);
   };
-  const onRegister= async () => {
+  const onRegister = async () => {
     try {
       let res = await wxGetUserProfile();
       console.log(res);
-      dispatch(registerUserInfo(res.userInfo))
+      dispatch(registerUserInfo(res.userInfo));
     } catch (err) {
       console.log(err);
       showError("请点击允许授权");
@@ -48,7 +53,10 @@ function Login(props) {
   const GetUserProfile = () => {
     return (
       <View className="no-login">
-        <Image className="avatar" src="https://6e6f-note-9gpvzagz1944b75f-1258879474.tcb.qcloud.la/no_login.png?sign=e34a712c47952d8b595caa23c4792f33&t=1622801104"></Image>
+        <Image
+          className="avatar"
+          src="https://6e6f-note-9gpvzagz1944b75f-1258879474.tcb.qcloud.la/no_login.png?sign=e34a712c47952d8b595caa23c4792f33&t=1622801104"
+        ></Image>
         <AtButton onClick={onRegister} type="primary">
           登录
         </AtButton>
@@ -84,7 +92,7 @@ function Login(props) {
       </View>
     );
   };
-  return <Main>{isLogin ? <ValidateSmsCode /> : <GetUserProfile />}</Main>;
+  return <Main>{user.isLogin ? <ValidateSmsCode /> : <GetUserProfile />}</Main>;
 }
 
 export default Login;

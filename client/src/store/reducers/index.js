@@ -1,28 +1,23 @@
 import { combineReducers } from "redux";
-import { RECEIVE_USER_INFO, GET_USER_INFO } from "@/store/constants";
+import actionTypes from "@/store/constants";
+import {  handleActions, combineActions } from "redux-actions";
 
-const userInfoState = {
-  userInfo: {},
-  isLogin: false
+const initialState = {
+  userInfo: { nickName: "游客" },
+  isLogin:false
 };
 
-function userInfo(state = userInfoState, action) {
-  switch (action.type) {
-    case RECEIVE_USER_INFO:
-      console.log("userInfo", action);
-      return {
-        userInfo: { ...action.playload },
-        isLogin: true
-      };
-    case GET_USER_INFO:
-      return {
-        userInfo: { ...action.playload },
-      };
-    default:
-      return state;
-  }
-}
+const user = handleActions({
+  [actionTypes.GET_USER_INFO]: (state, action) => {
+    return {
+      ...state,
+      isLogin:true,
+      userInfo:action.playload
+    };
+  },
+}, initialState);
+
 
 export default combineReducers({
-  userInfo
+  user,
 });
